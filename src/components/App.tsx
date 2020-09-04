@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 
 import { fetchTodos, deleteToDo } from '../store/actions';
@@ -10,9 +10,16 @@ interface IProps {
   deleteToDo: Function;
 }
 
+interface IState {
+  fetching: boolean;
+}
+
 const App: FC<IProps> = ({ todos, fetchTodos, deleteToDo }): JSX.Element => {
+  const [fetching, setFetching] = useState(false);
+
   const handleFetch = (): void => {
     fetchTodos();
+    setFetching(true);
   };
 
   const renderList = (): JSX.Element[] => {
@@ -26,12 +33,17 @@ const App: FC<IProps> = ({ todos, fetchTodos, deleteToDo }): JSX.Element => {
     });
   };
 
+  useEffect(() => {
+    setFetching(false);
+  }, [fetching]);
+
   return (
     <React.Fragment>
       <div>
         <button onClick={handleFetch}>Fetch To Do</button>
       </div>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
+        {fetching ? 'Loading' : null}
         {renderList()}
       </div>
     </React.Fragment>
