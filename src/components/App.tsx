@@ -11,11 +11,11 @@ interface IProps {
 }
 
 interface IState {
-  fetching: boolean;
+  fetching: boolean | undefined;
 }
 
 const App: FC<IProps> = ({ todos, fetchTodos, deleteToDo }): JSX.Element => {
-  const [fetching, setFetching] = useState(false);
+  const [fetching, setFetching] = useState<true | false>(false);
 
   const handleFetch = (): void => {
     fetchTodos();
@@ -25,7 +25,7 @@ const App: FC<IProps> = ({ todos, fetchTodos, deleteToDo }): JSX.Element => {
   const renderList = (): JSX.Element[] => {
     return todos.map((todo: Todo) => {
       return (
-        <div>
+        <div key={todo.id}>
           {todo.title}&nbsp;
           <button onClick={() => deleteToDo(todo.id)}>Delete</button>
         </div>
